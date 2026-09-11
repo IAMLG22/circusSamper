@@ -9,13 +9,16 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
+  <!-- Preload de la imagen del hero (primera impresión rápida) -->
+  <link rel="preload" as="image" href="assets/img/hero-circus.webp?v=4" fetchpriority="high">
+
   <!-- Google Fonts: Rye (display circo) + Fraunces (serif) + Inter (cuerpo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
 
   <!-- Estilos (bump ?v= en cada subida a Hostinger) -->
-  <link rel="stylesheet" href="styles.css?v=20260910">
+  <link rel="stylesheet" href="styles.css?v=20260911z">
 </head>
 <body>
 
@@ -31,8 +34,8 @@
 
   <a class="skip-link" href="#main">Saltar al contenido</a>
 
-  <!-- ===== HEADER / NAV (fijo) ===== -->
-  <header class="site-header">
+  <!-- ===== HEADER / NAV (fijo; transparente sobre el hero en la home) ===== -->
+  <header class="site-header site-header--home">
     <div class="wrap">
       <nav class="nav" data-nav aria-label="Principal">
         <a class="nav-brand" href="index.html">
@@ -64,29 +67,18 @@
 
   <main id="main">
 
-    <!-- ===== 1. HERO ===== -->
+    <!-- ===== 1. HERO (ilustración a pantalla completa + reflejos laterales) ===== -->
     <section class="hero">
-      <div class="hero-media">
-        <!-- FOTO/VÍDEO: gratinado saliendo del horno. Sustituir por:
-             <img src="assets/img/hero-gratinado.webp" alt="Gratinado recién horneado" fetchpriority="high" loading="eager"> -->
-        <div class="ph-img" role="img" aria-label="Foto del gratinado saliendo del horno">
-          <span>FOTO / VÍDEO: el gratinado saliendo del horno, queso burbujeante</span>
-        </div>
-      </div>
-      <div class="wrap">
-        <div class="hero-inner">
-          <span class="kicker">Trattoria-espectáculo · desde 1997</span>
-          <h1>El gratinado que Málaga lleva <span class="acento">pidiendo desde 1997</span></h1>
-          <p class="hero-lead">28 años montando el mejor espectáculo en el plato. Ahora en Teatinos, con la misma cocina de siempre.</p>
-          <div class="btn-row">
-            <a class="btn btn--primario" href="contacto.html#reserva">Reservar mesa</a>
-            <a class="btn btn--fantasma" href="carta.html">Ver la carta</a>
-          </div>
-        </div>
-      </div>
-      <div class="hero-scroll" aria-hidden="true">
-        <span>Pasa la función</span>
-        <span class="line"></span>
+      <!-- La ilustración central se ve entera y los laterales se rellenan con
+           copias ESPEJADAS pegadas al lado, para que continúe sin costura. -->
+      <div class="hero-strip">
+        <img class="hero-copy" src="assets/img/hero-circus.webp?v=4" alt="" aria-hidden="true" loading="eager" decoding="async">
+        <img class="hero-bg"
+             src="assets/img/hero-circus.webp?v=4"
+             alt="Escenario de Spaghettería Circus: telón de teatro, marquesina de 1997 y un comensal disfrutando un plato de spaghetti"
+             fetchpriority="high" loading="eager" decoding="async"
+             width="1600" height="1384">
+        <img class="hero-copy" src="assets/img/hero-circus.webp?v=4" alt="" aria-hidden="true" loading="eager" decoding="async">
       </div>
     </section>
 
@@ -279,7 +271,7 @@
   <script defer src="lib/gsap.min.js"></script>
   <script defer src="lib/ScrollTrigger.min.js"></script>
   <script defer src="lib/manifest.js"></script>
-  <script defer src="main.js?v=20260910"></script>
+  <script defer src="main.js?v=20260911z"></script>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

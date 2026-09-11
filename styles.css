@@ -413,6 +413,40 @@ h3, .h3 {
   transition: box-shadow .3s var(--ease-out);
 }
 .site-header.is-scrolled { box-shadow: var(--shadow-sm); }
+.site-header { transition: box-shadow .3s var(--ease-out), background .3s var(--ease-out), border-color .3s var(--ease-out); }
+
+/* --- Header transparente sobre el hero (solo home) --- */
+.site-header--home {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+.site-header--home::after {   /* velo oscuro arriba para que se lean los enlaces sobre la ilustración */
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(20, 7, 9, .55), rgba(20, 7, 9, 0));
+  pointer-events: none;
+}
+.site-header--home .nav-brand { color: var(--crema); }
+.site-header--home .nav-brand small { color: rgba(244, 236, 216, .8); }
+.site-header--home .nav-links a { color: var(--crema); }
+.site-header--home .nav-toggle { color: var(--crema); }
+.site-header--home .btn--secundario { color: var(--crema); border-color: var(--oro-claro); }
+.site-header--home.is-scrolled .btn--secundario { color: var(--tinta); border-color: var(--oro); }
+/* Al hacer scroll, la cabecera vuelve a su estado sólido crema */
+.site-header--home.is-scrolled {
+  background: rgba(244, 236, 216, .95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom-color: rgba(200, 162, 76, .35);
+}
+.site-header--home.is-scrolled::after { opacity: 0; }
+.site-header--home.is-scrolled .nav-brand { color: var(--granate); }
+.site-header--home.is-scrolled .nav-brand small { color: var(--tinta-70); }
+.site-header--home.is-scrolled .nav-links a { color: var(--tinta); }
+.site-header--home.is-scrolled .nav-toggle { color: var(--tinta); }
+
 .nav {
   display: flex;
   align-items: center;
@@ -470,69 +504,42 @@ h3, .h3 {
    7. SECCIONES HOME
    ============================================================= */
 
-/* --- HERO --- */
+/* --- HERO a pantalla completa + reflejos laterales --- */
 .hero {
   position: relative;
-  min-height: calc(100svh - var(--nav-h));
-  display: grid;
-  align-items: center;
+  height: 100svh;
+  margin-top: calc(-1 * var(--nav-h));
+  /* Sunburst suave que asoma por las zonas transparentes de arriba */
+  background-color: #f7e4d0;
+  background-image: repeating-conic-gradient(from -6deg at 50% 6%,
+    #fdf3e4 0deg 6deg,
+    #f6d9c3 6deg 12deg,
+    #fdf3e4 12deg 18deg,
+    #f3c9cf 18deg 24deg);
   overflow: hidden;
-  background: var(--tinta);
-  color: var(--crema);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
-.hero-media {
-  position: absolute; inset: 0;
-  z-index: 0;
+/* Tira: [copia espejada] [imagen] [copia espejada]. Ampliada y bajada para
+   que la mesa quede abajo y el sunburst asome arriba. */
+.hero-strip {
+  display: flex;
+  align-items: center;
+  height: 112%;
+  margin-top: 5vh;
 }
-.hero-media .ph-img {
+.hero-strip img {
   height: 100%;
-  border: none;
-  color: rgba(244, 236, 216, .55);
-  background:
-    repeating-linear-gradient(45deg, rgba(200,162,76,.08) 0 14px, transparent 14px 28px),
-    linear-gradient(160deg, #24352b, #16211b 70%);
+  width: auto;
+  max-width: none;
+  display: block;
 }
-.hero-media::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(20,33,27,.55), rgba(20,33,27,.35) 40%, rgba(20,33,27,.8));
-}
-.hero-inner {
-  position: relative;
-  z-index: 2;
-  padding-block: clamp(3rem, 10vh, 7rem);
-  max-width: 46rem;
-}
-.hero .kicker { color: var(--oro-claro); }
-.hero .kicker::before { background: var(--oro); }
-.hero h1 {
-  margin: 1rem 0 1.2rem;
-  color: var(--crema);
-}
-.hero h1 .acento { color: var(--oro-claro); font-style: italic; }
-.hero-lead {
-  color: rgba(244, 236, 216, .85);
-  font-size: clamp(1.05rem, 2vw, 1.3rem);
-  max-width: 44ch;
-  margin-bottom: 2rem;
-}
-.hero .btn-row { margin-top: .5rem; }
-.hero-scroll {
-  position: absolute;
-  bottom: 1.5rem; left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  color: rgba(244, 236, 216, .7);
-  font-size: .8rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  display: flex; flex-direction: column; align-items: center; gap: .4rem;
-}
-.hero-scroll .line {
-  width: 1px; height: 34px;
-  background: linear-gradient(var(--oro), transparent);
-  animation: scrollHint 2s infinite var(--ease-soft);
-}
+/* Solape para que no quede línea de separación entre copias */
+.hero-strip img:not(:first-child) { margin-left: -7px; }
+.hero-bg { position: relative; z-index: 1; }
+/* Copias laterales espejadas para que el borde encaje sin costura */
+.hero-copy { transform: scaleX(-1); }
 
 /* --- Sección genérica con encabezado --- */
 .section-head {
@@ -940,6 +947,9 @@ h3, .h3 {
   .nav.is-open .nav-links { transform: translateY(0); }
   .nav-links a { width: 100%; padding: .9rem 0; border-bottom: 1px solid rgba(28,42,34,.08); font-size: 1.1rem; }
   .nav-links a::after { display: none; }
+  /* El desplegable móvil siempre es crema: los enlaces van oscuros aunque
+     sea la home con cabecera transparente */
+  .site-header--home .nav-links a { color: var(--tinta); }
   /* En móvil, dejamos "Reservar" fuera del menú (siempre visible en header) */
   .nav-actions .btn--secundario { display: none; }
   /* Botón flotante visible en móvil */
