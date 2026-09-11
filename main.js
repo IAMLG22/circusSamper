@@ -130,7 +130,8 @@
      ============================================================= */
   function mountStars() {
     const target = $("[data-stars]");
-    if (!target || target.children.length > 0 || !data.stars) return;
+    if (!target || target.dataset.mounted || !data.stars) return;
+    target.dataset.mounted = "1";
     target.innerHTML = data.stars.map((p, i) => `
       <article class="plato-card reveal reveal-delay-${(i % 3) + 1}">
         <div class="plato-media">
@@ -153,7 +154,8 @@
      ============================================================= */
   function mountMenu() {
     const target = $("[data-menu]");
-    if (!target || target.children.length > 0 || !data.menu) return;
+    if (!target || target.dataset.mounted || !data.menu) return;
+    target.dataset.mounted = "1";
     const nums = ["I", "II", "III", "IV", "V"];
     target.innerHTML = data.menu.map((acto, ai) => {
       const items = acto.items.map(it => {
@@ -189,30 +191,25 @@
      ACORDEÓN de la carta (colapsable en móvil)
      ============================================================= */
   function initAcordeon() {
-    const esMovil = () => matchMedia("(max-width: 719px)").matches;
-    $$("[data-acto-toggle]").forEach(btn => {
+    // Acordeón dirigido por CSS: la clase .is-collapsed solo oculta el panel
+    // en móvil (media query). En escritorio no tiene efecto visual, así que
+    // el estado sobrevive a los cambios de tamaño de ventana.
+    $$("[data-acto-toggle]").forEach((btn, i) => {
       if (btn.dataset.bound) return;
       btn.dataset.bound = "1";
-      const panel = btn.nextElementSibling;
+      const acto = btn.closest("[data-acto]") || btn.parentElement;
+      // Estado inicial: colapsado salvo el primer acto (solo se nota en móvil)
+      if (i !== 0) {
+        acto.classList.add("is-collapsed");
+        btn.setAttribute("aria-expanded", "false");
+      }
       btn.addEventListener("click", () => {
-        if (!esMovil()) return; // en escritorio siempre abierto
-        const open = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", open ? "false" : "true");
-        panel.style.display = open ? "none" : "";
-        const chev = $(".chevron", btn);
-        if (chev) chev.style.transform = open ? "rotate(-90deg)" : "";
+        // Solo funciona como acordeón en móvil; en escritorio se ve todo
+        if (!matchMedia("(max-width: 719px)").matches) return;
+        const collapsed = acto.classList.toggle("is-collapsed");
+        btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
       });
     });
-    // Estado inicial en móvil: colapsados salvo el primero
-    if (esMovil()) {
-      $$("[data-acto-toggle]").forEach((btn, i) => {
-        if (i === 0) return;
-        btn.setAttribute("aria-expanded", "false");
-        if (btn.nextElementSibling) btn.nextElementSibling.style.display = "none";
-        const chev = $(".chevron", btn);
-        if (chev) chev.style.transform = "rotate(-90deg)";
-      });
-    }
   }
 
   /* =============================================================

@@ -1,0 +1,123 @@
+====================================================================
+  SPAGHETTERÍA CIRCUS — Web (HTML + CSS + JS, sin build, sin npm)
+====================================================================
+
+Esta es una web estática: se abre con doble clic y se sube tal cual
+a Hostinger (o cualquier hosting) arrastrando la carpeta. No necesita
+instalar nada.
+
+
+--------------------------------------------------------------------
+1) VER LA WEB EN TU ORDENADOR
+--------------------------------------------------------------------
+- Doble clic en "index.html" -> se abre en el navegador.
+  (Casi todo funciona así. Algún detalle fino se ve mejor con un
+   servidor local, pero para revisar textos vale de sobra.)
+
+
+--------------------------------------------------------------------
+2) SUBIRLA A HOSTINGER (drag & drop)
+--------------------------------------------------------------------
+a) Entra en tu panel de Hostinger -> Administrador de archivos.
+b) Abre la carpeta "public_html".
+c) Arrastra TODO el contenido de esta carpeta dentro de public_html
+   (index.html, styles.css, main.js, la carpeta lib/, assets/,
+   .htaccess, favicon.svg y las demás páginas .html).
+   IMPORTANTE: sube también el archivo ".htaccess" (evita que se
+   vean versiones antiguas tras actualizar).
+d) Listo. Tu web estará en tu dominio.
+
+Cada vez que actualices archivos, cambia la fecha del final de estas
+dos líneas en TODAS las páginas .html (busca "?v=20260911"):
+   styles.css?v=20260911   ->  styles.css?v=20260101 (fecha de hoy)
+   main.js?v=20260911      ->  main.js?v=20260101
+Así el navegador coge la versión nueva al instante.
+
+
+--------------------------------------------------------------------
+3) EDITAR TEXTOS, PLATOS, PRECIOS Y HORARIOS
+--------------------------------------------------------------------
+Casi todo el contenido "de datos" está en UN solo archivo:
+
+   lib/manifest.js
+
+Ábrelo con el Bloc de notas (o mejor, con Notepad++ / VS Code) y edita:
+   - Teléfono, email, dirección, Instagram  -> sección "contact"
+   - Horarios                                -> sección "hours" y "hoursText"
+   - Platos estrella de la home              -> sección "stars"
+   - La carta completa                       -> sección "menu"
+   - Nota de Google (reseñas)                -> sección "social_proof"
+
+Los textos "de párrafo" (hero, historia, etc.) están directamente en
+los archivos .html, bien comentados con <!-- comentarios -->.
+
+
+--------------------------------------------------------------------
+4) CAMBIAR HORARIOS (importante entender el formato)
+--------------------------------------------------------------------
+En lib/manifest.js, "hours" usa números de día:
+   0 = Domingo, 1 = Lunes, 2 = Martes ... 6 = Sábado
+Cada día es una lista de franjas [inicio, fin] en formato "HH:MM".
+Ejemplo (jueves con dos turnos):
+   4: [["13:00","16:00"], ["20:00","23:30"]],
+Un día cerrado se deja vacío:
+   2: [],   // Martes cerrado
+
+El cartel "Abierto ahora / Cerrado" se calcula solo desde aquí.
+(Recuerda actualizar también "hoursText", que es el texto que se ve.)
+
+
+--------------------------------------------------------------------
+5) PONER LAS FOTOS REALES
+--------------------------------------------------------------------
+Ahora hay "placeholders" (recuadros con el texto de qué foto va).
+Para poner fotos de verdad:
+   1. Guarda tus fotos en formato .webp dentro de "assets/img/"
+      (si solo tienes .jpg, también sirve; usa esa extensión).
+   2. En el HTML, busca los bloques con class="ph-img" y cámbialos por:
+      <img src="assets/img/nombre-de-tu-foto.webp"
+           alt="Descripción de la foto" loading="lazy">
+   3. Para los platos de la carta/home, en lib/manifest.js puedes
+      añadir el nombre del archivo donde pone "photoHint".
+
+Consejo: fotos horizontales para el hero y cuadradas para Instagram.
+
+
+--------------------------------------------------------------------
+6) LA CARTA EN PDF (opcional)
+--------------------------------------------------------------------
+El botón "Descargar carta (PDF)" busca el archivo:
+   assets/docs/carta.pdf
+Solo tienes que dejar ahí tu PDF con ese nombre. Si aún no lo tienes,
+el botón no molesta; puedes ocultarlo borrando su línea en carta.html.
+
+
+--------------------------------------------------------------------
+7) SISTEMA DE RESERVAS (pendiente, ya preparado)
+--------------------------------------------------------------------
+De momento "Reservar" lleva al teléfono (contacto.html#reserva).
+Cuando quieras poner reservas online (TheFork, CoverManager, etc.):
+   - Abre contacto.html y busca el comentario:
+        // TODO: integrar sistema de reservas
+   - Ahí pega el widget/enlace que te den. Todo el hueco está listo.
+
+
+--------------------------------------------------------------------
+8) COLORES Y TIPOGRAFÍAS
+--------------------------------------------------------------------
+Están al principio de "styles.css", en la sección "1. TOKENS".
+Cambia un color ahí y se actualiza en toda la web.
+   --granate  (rojo teatro)   --oro (dorado)
+   --crema    (fondo)         --tinta (texto)
+
+
+--------------------------------------------------------------------
+9) LA CARPETA lib/
+--------------------------------------------------------------------
+Contiene manifest.js (tus datos) y las librerías de animación
+(gsap). No borres nada de ahí; se sube junto con la web.
+
+
+¿Dudas? Todo el código está comentado en español. Busca los
+comentarios <!-- ... --> en los .html y /* ... */ en el CSS/JS.
+====================================================================

@@ -741,6 +741,14 @@ h3, .h3 {
   gap: 1rem;
 }
 .acto-toggle .chevron { transition: transform .3s var(--ease-out); color: var(--granate); }
+/* En escritorio el chevron no hace falta (todo abierto) */
+.acto-toggle { cursor: default; }
+.acto.is-collapsed .chevron { transform: rotate(-90deg); }
+/* Solo en móvil el acordeón oculta paneles y el botón es interactivo */
+@media (max-width: 719px) {
+  .acto-toggle { cursor: pointer; }
+  .acto.is-collapsed .menu-list { display: none; }
+}
 
 .menu-list { display: grid; gap: 1.1rem; }
 .menu-item {
@@ -936,6 +944,15 @@ h3, .h3 {
   .nav-actions .btn--secundario { display: none; }
   /* Botón flotante visible en móvil */
   .fab { display: flex; }
+}
+
+/* Pantallas estrechas: que quepan marca + Reservar + hamburguesa */
+@media (max-width: 540px) {
+  .nav-brand { font-size: 1.05rem; }
+  .nav-brand small { font-size: .5rem; letter-spacing: .12em; }
+  .nav-actions { gap: .4rem; }
+  .nav-actions .btn--sm { padding: .55rem .85rem; font-size: .85rem; }
+  .nav-toggle { width: 44px; height: 44px; }
 }
 
 @media (min-width: 540px) {
