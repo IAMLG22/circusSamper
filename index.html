@@ -10,7 +10,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <!-- Preload de la imagen del hero (primera impresión rápida) -->
-  <link rel="preload" as="image" href="assets/img/hero-circus.webp?v=4" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/img/hero-reserva.webp?v=1" fetchpriority="high">
 
   <!-- Google Fonts: Rye (display circo) + Fraunces (serif) + Inter (cuerpo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,9 +18,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
 
   <!-- Estilos (bump ?v= en cada subida a Hostinger) -->
-  <link rel="stylesheet" href="styles.css?v=20260911z">
+  <link rel="stylesheet" href="styles.css?v=20260916c">
 </head>
-<body>
+<body class="home">
 
   <!-- ===== TELÓN de apertura (solo Home; se desactiva tras 1ª visita) ===== -->
   <div class="telon" data-telon aria-hidden="true">
@@ -34,33 +34,32 @@
 
   <a class="skip-link" href="#main">Saltar al contenido</a>
 
-  <!-- ===== HEADER / NAV (fijo; transparente sobre el hero en la home) ===== -->
+  <!-- ===== HEADER / NAV (sticky; transparente sobre el hero en la home) =====
+       En la home usamos una cabecera «marquesina»: el logo GRANDE y centrado
+       sobre la madera, con los enlaces repartidos a los lados (2 y 2).
+       En móvil, el logo queda centrado y los enlaces pasan a la hamburguesa. -->
   <header class="site-header site-header--home">
     <div class="wrap">
-      <nav class="nav" data-nav aria-label="Principal">
+      <nav class="nav nav--marquesina" data-nav aria-label="Principal">
         <a class="nav-brand" href="index.html">
           Spaghettería Circus
           <small>Teatinos · Málaga</small>
         </a>
 
-        <div class="nav-links" id="nav-links">
+        <!-- Los 4 enlaces: en escritorio se reparten a los lados del logo;
+             en móvil se agrupan en el desplegable de la hamburguesa. -->
+        <div class="nav-menu" id="nav-menu">
           <a href="carta.html">Carta</a>
           <a href="la-casa.html">La Casa</a>
           <a href="el-local.html">El Local</a>
           <a href="contacto.html">Contacto</a>
         </div>
 
-        <div class="nav-actions">
-          <!-- Botón "Reservar": de momento va a contacto/teléfono -->
-          <!-- // TODO: integrar sistema de reservas -->
-          <a class="btn btn--secundario btn--sm" href="carta.html">Ver la carta</a>
-          <a class="btn btn--primario btn--sm" href="contacto.html#reserva">Reservar</a>
-          <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M3 6h18M3 12h18M3 18h18"/>
-            </svg>
-          </button>
-        </div>
+        <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
       </nav>
     </div>
   </header>
@@ -68,17 +67,30 @@
   <main id="main">
 
     <!-- ===== 1. HERO (ilustración a pantalla completa + reflejos laterales) ===== -->
+    <!-- Portada orientada a RESERVA: el payaso te invita a sentarte y, sobre el
+         sitio del reservado (banco de la derecha), un botón flotante para reservar. -->
     <section class="hero">
-      <!-- La ilustración central se ve entera y los laterales se rellenan con
-           copias ESPEJADAS pegadas al lado, para que continúe sin costura. -->
+      <!-- La ilustración central (con el payaso) se ve entera; los laterales se
+           rellenan con la MISMA escena pero SIN payaso, para que al ampliar la
+           pantalla no aparezca un payaso cortado por los lados. -->
       <div class="hero-strip">
-        <img class="hero-copy" src="assets/img/hero-circus.webp?v=4" alt="" aria-hidden="true" loading="eager" decoding="async">
-        <img class="hero-bg"
-             src="assets/img/hero-circus.webp?v=4"
-             alt="Escenario de Spaghettería Circus: telón de teatro, marquesina de 1997 y un comensal disfrutando un plato de spaghetti"
-             fetchpriority="high" loading="eager" decoding="async"
-             width="1600" height="1384">
-        <img class="hero-copy" src="assets/img/hero-circus.webp?v=4" alt="" aria-hidden="true" loading="eager" decoding="async">
+        <img class="hero-copy" src="assets/img/hero-lados.webp?v=1" alt="" aria-hidden="true" loading="eager" decoding="async">
+        <!-- Bloque central: la ilustración + el botón flotante anclado a ella
+             (así el botón se coloca en proporción a la imagen al escalar). -->
+        <div class="hero-center">
+          <img class="hero-bg"
+               src="assets/img/hero-reserva.webp?v=1"
+               alt="Escenario de Spaghettería Circus: un payaso disfrutando un plato de spaghetti y, en el sitio de enfrente, una mesa puesta con el cartel «Reservado, tu mesa te espera»"
+               fetchpriority="high" loading="eager" decoding="async"
+               width="1800" height="1557">
+          <!-- Botón flotante de reserva sobre el banco vacío del reservado.
+               // TODO: integrar sistema de reservas — de momento va a contacto/teléfono -->
+          <a class="hero-cta" href="contacto.html#reserva">
+            <span class="hero-cta-kicker">Tu mesa te espera</span>
+            <span class="hero-cta-main">Reserva tu mesa aquí</span>
+          </a>
+        </div>
+        <img class="hero-copy" src="assets/img/hero-lados.webp?v=1" alt="" aria-hidden="true" loading="eager" decoding="async">
       </div>
     </section>
 

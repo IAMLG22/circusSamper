@@ -501,6 +501,78 @@ h3, .h3 {
 .nav-toggle svg { width: 26px; height: 26px; }
 
 /* =============================================================
+   Cabecera «MARQUESINA» (solo home): logo grande centrado sobre
+   la madera, con los enlaces repartidos a los lados (2 y 2).
+   ============================================================= */
+/* Cabecera un poco más alta solo en la home para que el logo respire */
+body.home { --nav-h: 88px; }
+
+.nav--marquesina {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3.2vw, 2.6rem);
+  min-height: var(--nav-h);
+}
+/* Los 4 enlaces participan directamente en el flex de la nav (para poder
+   colocar 2 a cada lado del logo con `order`). */
+.nav--marquesina .nav-menu { display: contents; }
+.nav--marquesina .nav-menu a {
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  position: relative;
+  padding: .3rem 0;
+}
+.nav--marquesina .nav-menu a::after {
+  content: ""; position: absolute; left: 0; bottom: -2px;
+  width: 0; height: 2px; background: var(--oro);
+  transition: width .3s var(--ease-out);
+}
+.nav--marquesina .nav-menu a:hover::after { width: 100%; }
+/* Reparto: 2 enlaces a la izquierda · [LOGO] · 2 enlaces a la derecha */
+.nav--marquesina .nav-menu a:nth-child(1) { order: -2; }
+.nav--marquesina .nav-menu a:nth-child(2) { order: -1; }
+.nav--marquesina .nav-brand           { order: 0; }
+.nav--marquesina .nav-menu a:nth-child(3) { order: 1; }
+.nav--marquesina .nav-menu a:nth-child(4) { order: 2; }
+/* Logo grande, centrado, tipo cartel de feria */
+.nav--marquesina .nav-brand {
+  text-align: center;
+  line-height: .95;
+  font-size: clamp(1.7rem, 3.6vw, 2.9rem);
+  padding: 0 clamp(.4rem, 2vw, 1.6rem);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .55);
+}
+.nav--marquesina .nav-brand small {
+  font-size: clamp(.5rem, 1vw, .62rem);
+  margin-top: .25rem;
+}
+/* Transiciones suaves para que el paso a estado «con scroll» sea un
+   fundido y no un salto/parpadeo de colores. */
+.nav--marquesina .nav-brand,
+.nav--marquesina .nav-brand small,
+.nav--marquesina .nav-menu a {
+  transition: color .3s var(--ease-out), font-size .3s var(--ease-out),
+              text-shadow .3s var(--ease-out);
+}
+.site-header--home::after { transition: opacity .35s var(--ease-out); }
+/* Colores sobre la madera (home, sin scroll) */
+.site-header--home .nav-menu a { color: var(--crema); }
+/* Al hacer scroll, la cabecera se vuelve sólida. IMPORTANTE: mantenemos la
+   MISMA altura (--nav-h) para NO mover el documento (el hero cuelga de esa
+   altura con un margen negativo); solo cambian colores y el tamaño del logo.
+   Antes cambiaba la altura y provocaba un salto de ~26px en el umbral. */
+.site-header--home.is-scrolled .nav-menu a { color: var(--tinta); }
+.site-header--home.is-scrolled .nav-brand { text-shadow: none; }
+.site-header--home.is-scrolled .nav--marquesina .nav-brand {
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+}
+
+/* =============================================================
    7. SECCIONES HOME
    ============================================================= */
 
@@ -509,25 +581,21 @@ h3, .h3 {
   position: relative;
   height: 100svh;
   margin-top: calc(-1 * var(--nav-h));
-  /* Sunburst suave que asoma por las zonas transparentes de arriba */
-  background-color: #f7e4d0;
-  background-image: repeating-conic-gradient(from -6deg at 50% 6%,
-    #fdf3e4 0deg 6deg,
-    #f6d9c3 6deg 12deg,
-    #fdf3e4 12deg 18deg,
-    #f3c9cf 18deg 24deg);
+  /* La ilustración nueva llega hasta arriba (madera), así que sólo hace falta
+     un color de respaldo tono madera por si quedara algún borde. */
+  background-color: #4a3320;
   overflow: hidden;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
-/* Tira: [copia espejada] [imagen] [copia espejada]. Ampliada y bajada para
-   que la mesa quede abajo y el sunburst asome arriba. */
+/* Tira: [copia espejada] [imagen central] [copia espejada].
+   La imagen llena toda la altura y arranca desde arriba, para que la madera
+   toque el borde superior y no quede franja fea. */
 .hero-strip {
   display: flex;
-  align-items: center;
-  height: 112%;
-  margin-top: 5vh;
+  align-items: flex-start;
+  height: 100%;
 }
 .hero-strip img {
   height: 100%;
@@ -536,10 +604,75 @@ h3, .h3 {
   display: block;
 }
 /* Solape para que no quede línea de separación entre copias */
-.hero-strip img:not(:first-child) { margin-left: -7px; }
-.hero-bg { position: relative; z-index: 1; }
+.hero-strip > .hero-copy:not(:first-child),
+.hero-strip > .hero-center { margin-left: -7px; }
+.hero-center + .hero-copy { margin-left: -7px; }
+/* Bloque central: contexto de posición para el botón flotante */
+.hero-center { position: relative; height: 100%; z-index: 1; }
+.hero-bg { display: block; height: 100%; width: auto; }
 /* Copias laterales espejadas para que el borde encaje sin costura */
 .hero-copy { transform: scaleX(-1); }
+
+/* --- Botón flotante de reserva sobre el banco del reservado --- */
+.hero-cta {
+  position: absolute;
+  /* Móvil (por defecto): centrado en la zona visible, sobre la mesa */
+  left: 50%;
+  top: 78%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .1rem;
+  padding: .7rem 1.5rem;
+  border-radius: 999px;
+  background: var(--oro);
+  color: var(--tinta);
+  border: 2px solid var(--oro-claro);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .45), 0 0 0 4px rgba(200, 162, 76, .25);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  animation: hero-cta-pulse 2.6s var(--ease-out) infinite;
+  transition: transform .3s var(--ease-out), background .3s var(--ease-out),
+              box-shadow .3s var(--ease-out);
+}
+.hero-cta:hover {
+  background: var(--oro-claro);
+  transform: translate(-50%, -50%) scale(1.04);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, .5), 0 0 0 5px rgba(227, 197, 121, .35);
+  animation-play-state: paused;
+}
+.hero-cta-kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .85;
+}
+.hero-cta-main {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.18rem;
+  line-height: 1.05;
+}
+@keyframes hero-cta-pulse {
+  0%, 100% { box-shadow: 0 10px 26px rgba(0, 0, 0, .45), 0 0 0 4px rgba(200, 162, 76, .25); }
+  50%      { box-shadow: 0 10px 26px rgba(0, 0, 0, .45), 0 0 0 10px rgba(200, 162, 76, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta { animation: none; }
+}
+/* En pantallas anchas la imagen se ve entera: anclamos el botón sobre el
+   banco vacío del reservado (a la derecha del payaso). */
+@media (min-width: 769px) {
+  .hero-cta {
+    left: 73%;
+    top: 60%;
+  }
+}
 
 /* --- Sección genérica con encabezado --- */
 .section-head {
@@ -954,6 +1087,47 @@ h3, .h3 {
   .nav-actions .btn--secundario { display: none; }
   /* Botón flotante visible en móvil */
   .fab { display: flex; }
+
+  /* --- Marquesina (home) en móvil: logo centrado, hamburguesa a la derecha
+         y los 4 enlaces dentro del desplegable --- */
+  .nav--marquesina { justify-content: center; }
+  .nav--marquesina .nav-brand {
+    order: 0;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, .5);
+  }
+  .nav--marquesina .nav-toggle {
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  }
+  /* El menú deja de repartirse a los lados y pasa a ser un desplegable */
+  .nav--marquesina .nav-menu {
+    display: flex;
+    position: fixed;
+    inset: var(--nav-h) 0 auto 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    background: var(--crema);
+    border-bottom: 1px solid rgba(200, 162, 76, .35);
+    box-shadow: var(--shadow-md);
+    padding: 1rem var(--gutter) 1.5rem;
+    transform: translateY(-120%);
+    transition: transform .4s var(--ease-out);
+    max-height: calc(100vh - var(--nav-h));
+    overflow-y: auto;
+  }
+  .nav--marquesina.is-open .nav-menu { transform: translateY(0); }
+  .nav--marquesina .nav-menu a {
+    order: 0;
+    width: 100%;
+    padding: .9rem 0;
+    border-bottom: 1px solid rgba(28, 42, 34, .08);
+    font-size: 1.1rem;
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--tinta);
+  }
+  .nav--marquesina .nav-menu a::after { display: none; }
 }
 
 /* Pantallas estrechas: que quepan marca + Reservar + hamburguesa */
@@ -963,6 +1137,9 @@ h3, .h3 {
   .nav-actions { gap: .4rem; }
   .nav-actions .btn--sm { padding: .55rem .85rem; font-size: .85rem; }
   .nav-toggle { width: 44px; height: 44px; }
+  /* Marquesina: logo algo menor para que no choque con la hamburguesa */
+  .nav--marquesina .nav-brand { font-size: 1.2rem; padding: 0 2.6rem; }
+  .nav--marquesina .nav-brand small { font-size: .48rem; }
 }
 
 @media (min-width: 540px) {
